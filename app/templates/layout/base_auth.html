@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html class="h-full bg-white">
+<head>
+    <title>PSQI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static',filename='css/output.css') }}" rel="stylesheet">
+</head>
+<body class="h-full">
+
+<div class="flex min-h-full">
+    <div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="relative hidden w-0 flex-1 lg:block">
+        <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80" alt="">
+    </div>
+</div>
+
+</body>
+</html>

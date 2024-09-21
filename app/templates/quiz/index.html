@@ -1,0 +1,142 @@
+{% extends "layout/base_app.html" %}
+
+{% block content %}
+
+{% if min_score %}
+<div>
+    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
+            <dt>
+                <div class="absolute rounded-md bg-indigo-500 p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+
+                </div>
+                <p class="ml-16 truncate text-sm font-medium text-gray-500">Menor Score</p>
+            </dt>
+            <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
+                <p class="text-2xl font-semibold text-gray-900">{{ min_score.overall_score }}</p>
+                <p class="ml-2 flex items-baseline text-sm font-semibold text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 flex-shrink-0 self-center text-green-500 mr-2" >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    {{ min_score.created_at.strftime('%d/%m/%Y %H:%M') }}
+                </p>
+                <div class="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
+                    <div class="text-sm">
+                        <a href="{{ url_for('quiz.get_quiz', id=min_score.id) }}" class="font-medium text-indigo-600 hover:text-indigo-500">Ver questionário</a>
+                    </div>
+                </div>
+            </dd>
+        </div>
+        <div class="relative overflow-hidden rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6">
+            <dt>
+                <div class="absolute rounded-md bg-indigo-500 p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+
+                </div>
+                <p class="ml-16 truncate text-sm font-medium text-gray-500">Maior Score</p>
+            </dt>
+            <dd class="ml-16 flex items-baseline pb-6 sm:pb-7">
+                <p class="text-2xl font-semibold text-gray-900">{{ max_score.overall_score }}</p>
+                <p class="ml-2 flex items-baseline text-sm font-semibold text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 flex-shrink-0 self-center text-green-500 mr-2" >
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    {{ max_score.created_at.strftime('%d/%m/%Y %H:%M') }}
+                </p>
+                <div class="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
+                    <div class="text-sm">
+                        <a href="{{ url_for('quiz.get_quiz', id=max_score.id) }}" class="font-medium text-indigo-600 hover:text-indigo-500">Ver questionário</a>
+                    </div>
+                </div>
+            </dd>
+        </div>
+    </dl>
+</div>
+
+<div class="rounded-lg bg-white px-4 pb-12 pt-5 shadow sm:px-6 sm:pt-6 mt-16">
+    <canvas id="scoreChart" width="400" height="200"></canvas>
+</div>
+{% endif %}
+
+<div class="sm:flex sm:items-center mt-16">
+    <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-gray-900">Todos seus questionários</h1>
+        <p class="mt-2 text-sm text-gray-700">Esta listagem contém o histórico completo de questionários respondidos</p>
+    </div>
+    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+        <a
+                href="{{ url_for('quiz.quiz') }}"
+                class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Responder novo questionário
+        </a>
+    </div>
+</div>
+<div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">ID</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Pontuação global</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Data do preenchimento</th>
+                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                            <span class="sr-only">Ver</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ quiz.id }}</td>
+                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ quiz.overall_score }}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ quiz.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                            <a href="{{ url_for('quiz.get_quiz', id=quiz.id) }}" class="text-indigo-600 hover:text-indigo-900">Ver</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                    <!-- More people... -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% if min_score %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('scoreChart').getContext('2d');
+    var scoreChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_data.labels | tojson }},
+    datasets: [{
+        label: 'Pontuação Global',
+        data: {{ chart_data.scores | tojson }},
+    borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+    }]
+    },
+    options: {
+        responsive: true,
+            scales: {
+            y: {
+                beginAtZero: true,
+                    suggestedMax: 21  // PSQI score máximo
+            }
+        }
+    }
+    });
+</script>
+{% endif %}
+{% endblock %}

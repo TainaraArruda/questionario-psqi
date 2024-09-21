@@ -1,0 +1,486 @@
+{% extends "layout/base_app.html" %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="rounded-md {% if category == 'error' %}bg-red-50 {% endif %}  {% if category == 'success' %}bg-green-50 {% endif %} p-4 mt-4">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            {% if category == 'success' %}
+            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            {% endif %}
+            {% if category == 'error' %}
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+            </svg>
+            {% endif %}
+        </div>
+        <div class="ml-3">
+            <p class="text-sm font-medium {% if category == 'error' %}text-red-800 {% endif %}  {% if category == 'success' %}text-green-800 {% endif %}">{{ message }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<form action="{{ url_for('quiz.create_quiz') }}" method="POST" >
+    <div class="space-y-12">
+        <div class="pb-12">
+
+            <p class="mt-1 text-sm leading-6 text-gray-60 mt-8">
+                As seguintes perguntas são relativas aos seus hábitos de sono durante <strong>o último mês somente</strong>. Suas respostas devem indicar a lembrança mais exata
+                da <strong>maioria</strong> dos dias e noites do último mês. Por favor, responda a todas as perguntas.
+            </p>
+
+            <div class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
+                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                    <label for="question_1" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">1. Durante o último mês, quando você geralmente foi para a cama a noite?</label>
+                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                        <input
+                                type="time"
+                                name="question_1"
+                                id="question_1"
+                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                        >
+                    </div>
+                </div>
+
+                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                    <label for="question_1" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">2. Durante o último mês, quanto tempo (em minutos) você geralmente levou para dormir a noite?</label>
+                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                            <input
+                                    type="number"
+                                    name="question_2"
+                                    id="question_2"
+                                    class="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                    placeholder="--"
+                            >
+                            <span class="flex select-none items-center pr-3 text-gray-500 sm:text-sm">minutos</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                    <label for="question_1" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">3. Durante o último mês, quando você geralmente levantou de manhã?</label>
+                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                        <input
+                                type="time"
+                                name="question_3"
+                                id="question_3"
+                                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                        >
+                    </div>
+                </div>
+
+                <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                    <label for="question_1" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">4. Durante o último mês, quantas horas de sono você teve por noite? (Este pode ser diferente do número de horas que você ficou na cama)</label>
+                    <div class="mt-2 sm:col-span-2 sm:mt-0">
+                        <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                            <input
+                                    type="number"
+                                    name="question_4"
+                                    id="question_4"
+                                    class="block flex-1 border-0 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                                    placeholder="--"
+                            >
+                            <span class="flex select-none items-center pr-3 text-gray-500 sm:text-sm">horas</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <p class="mt-1 text-sm leading-6 text-gray-60 mt-8">
+                Para cada uma das questões restantes, marque a <strong>melhor (uma)</strong> resposta. Por favor, responda a todas as questões.
+            </p>
+
+            <div class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:pb-0">
+                <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">5. Durante o último mês, com que frequência você teve dificuldade para dormir porque você... </span>
+
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">A) não conseguiu adormecer em até 30 minutos</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_a_0" value="0" name="question_5_a" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_a_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_a_1" value="1" name="question_5_a" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_a_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_a_2" value="2" name="question_5_a" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_a_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_a_3" value="3" name="question_5_a" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_a_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">B) acordou no meio da noite ou de manhã cedo </span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_b_0" value="0" name="question_5_b" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_b_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_b_1" value="1" name="question_5_b" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_b_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_b_2" value="2" name="question_5_b" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_b_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_b_3" value="3" name="question_5_b" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_b_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">C) precisou levantar para ir ao banheiro</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_c_0" value="0" name="question_5_c" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_c_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_c_1" value="1" name="question_5_c" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_c_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_c_2" value="2" name="question_5_c" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_c_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_c_3" value="3" name="question_5_c" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_c_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">D) não conseguiu respirar confortavelmente</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_d_0" value="0" name="question_5_d" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_d_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_d_1" value="1" name="question_5_d" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_d_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_d_2" value="2" name="question_5_d" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_d_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_d_3" value="3" name="question_5_d" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_d_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">E) tossiu ou roncou forte</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_e_0" value="0" name="question_5_e" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_e_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_e_1" value="1" name="question_5_e" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_e_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_e_2" value="2" name="question_5_e" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_e_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_e_3" value="3" name="question_5_e" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_e_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">F) sentiu muito frio</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_f_0" value="0" name="question_5_f" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_f_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_f_1" value="1" name="question_5_f" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_f_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_f_2" value="2" name="question_5_f" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_f_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_f_3" value="3" name="question_5_f" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_f_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">G) sentiu muito calor</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_g_0" value="0" name="question_5_g" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_g_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_g_1" value="1" name="question_5_g" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_g_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_g_2" value="2" name="question_5_g" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_g_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_g_3" value="3" name="question_5_g" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_g_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">H) teve sonhos ruins</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_h_0" value="0" name="question_5_h" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_h_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_h_1" value="1" name="question_5_h" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_h_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_h_2" value="2" name="question_5_h" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_h_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_h_3" value="3" name="question_5_h" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_h_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">I) teve dor</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_i_0" value="0" name="question_5_i" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_i_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_i_1" value="1" name="question_5_i" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_i_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_i_2" value="2" name="question_5_i" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_i_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_i_3" value="3" name="question_5_i" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_i_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">J) outra(s) razão(ões), por favor descreva:</span>
+
+                    <div class="sm:col-span-3">
+                        <div class="mt-2">
+                            <input
+                                    type="text"
+                                    name="question_5_j_other"
+                                    id="question_5_j_other"
+                                    placeholder="Descreve outra razão aqui"
+                                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            >
+                        </div>
+                    </div>
+
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Com que frequência, durante o último mês, você teve dificuldade para dormir devido a essa razão? </span>
+
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_5_j_0" value="0" name="question_5_j" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_j_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_j_1" value="1" name="question_5_j" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_j_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_j_2" value="2" name="question_5_j" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_j_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_5_j_3" value="3" name="question_5_j" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_5_j_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mt-2 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:pb-0">
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">6. Durante o último mês como você classificaria a qualidade do seu sono de uma maneira geral: </span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_6_0" value="0" name="question_6" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_6_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Muito boa</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_6_1" value="1" name="question_6" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_6_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Boa</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_6_2" value="2" name="question_6" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_6_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Ruim</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_6_3" value="3" name="question_6" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_6_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Muito Ruim</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="mt-2 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:pb-0">
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">7. Durante o último mês, com que frequência você tomou medicamento (prescrito ou “por conta própria”) para lhe ajudar a dormir?</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_7_0" value="0" name="question_7" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_7_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_7_1" value="1" name="question_7" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_7_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_7_2" value="2" name="question_7" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_7_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_7_3" value="3" name="question_7" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_7_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:pb-0">
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">8. No último mês, que frequência você teve dificuldade para ficar acordado enquanto dirigia, comia ou participava de uma atividade social (festa, reunião de amigos, trabalho, estudo)</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_8_0" value="0" name="question_8" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_8_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma no último mês</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_8_1" value="1" name="question_8" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_8_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Menos de uma vez por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_8_2" value="2" name="question_8" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_8_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Uma ou duas vezes por semana</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_8_3" value="3" name="question_8" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_8_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Três ou mais vezes na semana</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:pb-0">
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">9. Durante o último mês, quão problemático foi pra você manter o entusiasmo (ânimo) para fazer as coisas (suas atividades habituais)?</span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_9_0" value="0" name="question_9" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_9_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Nenhuma dificuldade</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_9_1" value="1" name="question_9" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_9_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Um problema leve</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_9_2" value="2" name="question_9" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_9_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Um problema razoável</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_9_3" value="3" name="question_9" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_9_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Um grande problema</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-2 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:pb-0">
+                <div class="sm:items-start sm:gap-4 sm:py-6">
+                    <span class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">10. Você tem um(a) parceiro [esposo (a)] ou colega de quarto? </span>
+                    <div class="mt-2 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                        <div class="flex items-center">
+                            <input id="question_10_0" value="0" name="question_10" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_10_0" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Não</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_10_1" value="1" name="question_10" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_10_1" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Parceiro ou colega, mas em outro quarto</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_10_2" value="2" name="question_10" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_10_2" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Parceiro no mesmo quarto, mas em outra cama</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="question_10_3" value="3" name="question_10" type="radio" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <label for="question_10_3" class="ml-3 block text-sm font-medium leading-6 text-gray-900">Parceiro na mesma cama</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="mt-6 flex items-center justify-end gap-x-6">
+        <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancelar</button>
+        <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Enviar</button>
+    </div>
+</form>
+{% endblock %}

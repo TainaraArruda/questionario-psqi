@@ -1,0 +1,180 @@
+{% extends "layout/base_app.html" %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="rounded-md {% if category == 'error' %}bg-red-50 {% endif %}  {% if category == 'success' %}bg-green-50 {% endif %} p-4 mt-4">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            {% if category == 'success' %}
+            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            {% endif %}
+            {% if category == 'error' %}
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+            </svg>
+            {% endif %}
+        </div>
+        <div class="ml-3">
+            <p class="text-sm font-medium {% if category == 'error' %}text-red-800 {% endif %}  {% if category == 'success' %}text-green-800 {% endif %}">{{ message }}</p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<div>
+    <div class="px-4 sm:px-0 flex flex-row items-center justify-between">
+        <div>
+            <h3 class="text-base font-semibold leading-7 text-gray-900">{{ quiz.user.fullname }}</h3>
+            <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Data de nascimento: {{ quiz.user.birthdate.strftime('%d/%m/%Y') }}</p>
+        </div>
+        <div class="flex flex-col">
+            <span class="text-lg text-black font-bold">Score: {{ quiz.overall_score }}</span>
+            {% if quiz.overall_score > 5 %}
+                <span class="inline-flex items-center rounded-md bg-red-400/10 px-2 py-1 text-xs font-medium text-red-400 ring-1 ring-inset ring-red-400/20">Baixa qualidade do sono</span>
+            {% else %}
+                <span class="inline-flex items-center rounded-md bg-green-500/10 px-2 py-1 text-xs font-medium text-green-400 ring-1 ring-inset ring-green-500/20">Boa qualidade do sono</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="mt-6 border-t border-gray-100">
+        <dl class="divide-y divide-gray-100">
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">1. Durante o último mês, quando você geralmente foi para a cama a noite?</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_1 }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">2. Durante o último mês, quanto tempo (em minutos) você geralmente levou para dormir a noite?</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_2 }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">3. Durante o último mês, quando você geralmente levantou de manhã?</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_3 }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">4. Durante o último mês, quantas horas de sono você teve por noite? (Este pode ser diferente do número de horas que você ficou na cama)</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_4 }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-gray-900">5. Durante o último mês, com que frequência você teve dificuldade para dormir porque você...</dt>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">A) não conseguiu adormecer em até 30 minutos</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_a }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">B) acordou no meio da noite ou de manhã cedo</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_b }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">C) precisou levantar para ir ao banheiro</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_c }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">D) não conseguiu respirar confortavelmente</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_d }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">E) tossiu ou roncou forte</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_e }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">F) sentiu muito frio</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_f }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">G) sentiu muito calor</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_g }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">H) teve sonhos ruins</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_h }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">I) teve dor</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_i }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">
+                    J) outra(s) razão(ões), por favor descreva:
+                    {% if quiz.question_5_j_other %}
+                        <br/>
+                        {{ quiz.question_5_j_other }}
+                    {% endif %}
+
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.question_5_j }}</dd>
+            </div>
+
+        </dl>
+    </div>
+
+    <div class="px-4 sm:px-0 flex flex-row items-center justify-between">
+        <div>
+            <h3 class="text-xl font-bold leading-7 text-gray-900">Resultados</h3>
+        </div>
+    </div>
+
+    <div class="mt-6 border-t border-gray-100">
+        <dl class="divide-y divide-gray-100">
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">Pontuação global</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.overall_score }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">Resumo da pontuação</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+
+                    {% if quiz.overall_score >= 0 and quiz.overall_score <= 4 %}
+                        Boa qualidade do sono. O indivíduo geralmente não apresenta problemas significativos relacionados ao sono.
+                    {% elif quiz.overall_score >= 5 and quiz.overall_score <= 10 %}
+                        Qualidade do sono média. Pode haver alguma dificuldade em aspectos como a duração, latência ou eficiência do sono.
+                    {% elif quiz.overall_score >= 11 and quiz.overall_score <= 15 %}
+                        Qualidade do sono ruim. A pessoa pode enfrentar problemas frequentes com o sono, afetando a qualidade de vida.
+                    {% elif quiz.overall_score >= 16 and quiz.overall_score <= 21 %}
+                        Muito má qualidade do sono. Provavelmente, há sérios distúrbios de sono que podem exigir uma avaliação médica.
+                    {% else %}
+                        Pontuação inválida.
+                    {% endif %}
+
+                </dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">1) Qualidade subjetiva do sono</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.subjective_sleep_quality }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">2) Latência do sono</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.sleep_latency }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">3) Duração do sono </dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.sleep_duration }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">4) Eficiência habitual do sono</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.habitual_sleep_efficiency }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">5) Distúrbios do sono</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.sleep_disorders }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">6) Uso de remédio para dormir</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.use_of_sleeping_pills }}</dd>
+            </div>
+            <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 sm:col-span-2 text-gray-900">7) Disfunção diurna</dt>
+                <dd class="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">{{ quiz.daytime_dysfunction }}</dd>
+            </div>
+        </dl>
+    </div>
+</div>
+
+{% endblock %}
