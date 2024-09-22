@@ -1,5 +1,6 @@
 
-![Logo](https://i.ibb.co/56npqDH/logoinnera.png)
+![logoinnera](https://github.com/user-attachments/assets/532cf2d6-ae52-4fb1-bde0-18897e3f9b53)
+
 # Questionario PSQI
 
 O objetivo deste projeto é desenvolver uma aplicação web simples para coletar e processar as respostas de um questionário PSQI (Pittsburgh Sleep Quality Index) usando a stack tecnológica Python com Flask e TailwindCSS. A aplicação incluirá funcionalidades de login, uma interface para responder ao questionário, exibir os resultados e listar respostas anteriores do usuário.
